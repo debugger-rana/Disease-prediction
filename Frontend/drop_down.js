@@ -1,51 +1,130 @@
-const multiSelect = document.getElementById('multiSelect');
-const dropdown = document.getElementById('dropdown');
-const selectedItems = document.getElementById('selectedItems');
-const predictBtn = document.getElementById('predictBtn');
+/* ================= CORE ELEMENTS ================= */
+const multiSelect = document.getElementById("multiSelect");
+const dropdown = document.getElementById("dropdown");
+const selectedItems = document.getElementById("selectedItems");
+const searchInput = document.getElementById("sym-search");
+const addBtn = document.getElementById("add-btn");
+const clearBtn = document.getElementById("clear-btn");
+const predictBtn = document.getElementById("predict-btn");
 
-const selectedValues = new Set();
+const API_BASE = "http://127.0.0.1:8000";
+const selectedVals = new Set();
 
-multiSelect.addEventListener('click', () => {
-  multiSelect.classList.toggle('active');
+/* =============== INITIALISE MASTER LIST =============== */
+fetch(`${API_BASE}/symptoms`)
+  .then((r) => r.json())
+  .then((js) => {
+    const dl = document.getElementById("sym-list");
+    js.symptoms.sort().forEach((sym) => {
+      const opt = document.createElement("option");
+      opt.value = sym;
+      dl.appendChild(opt);
+    });
+  });
+
+/* ===== MULTI-SELECT TOGGLE ===== */
+multiSelect.addEventListener("click", (e) => {
+  if (e.target === searchInput) return; // keep open when typing
+  multiSelect.classList.toggle("active");
+  searchInput.focus();
 });
 
-dropdown.addEventListener('click', (e) => {
-  const value = e.target.getAttribute('data-value');
-  const label = e.target.textContent;
+/* ===== ADD SYMPTOM BUTTON ===== */
+addBtn.addEventListener("click", addSymptom);
 
-  if (!value || selectedValues.has(value)) return;
+function addSymptom() {
+  const val = searchInput.value.trim();
+  if (!val || selectedVals.has(val)) return;
+  selectedVals.add(val);
 
-  selectedValues.add(value);
+  // remove placeholder
+  const ph = selectedItems.querySelector(".placeholder");
+  if (ph) ph.remove();
 
-  const placeholder = selectedItems.querySelector('.placeholder');
-  if (placeholder) placeholder.remove();
-
-  const tag = document.createElement('span');
-  tag.innerHTML = `${label} <i data-remove="${value}">&times;</i>`;
+  const tag = document.createElement("span");
+  tag.className = "pill";
+  tag.textContent = val;
+  tag.dataset.remove = val;
   selectedItems.appendChild(tag);
-});
 
-selectedItems.addEventListener('click', (e) => {
-  if (e.target.dataset.remove) {
-    const valueToRemove = e.target.dataset.remove;
-    selectedValues.delete(valueToRemove);
-    e.target.parentElement.remove();
+  searchInput.value = "";
+}
 
-    if (selectedValues.size === 0) {
-      const placeholder = document.createElement('span');
-      placeholder.className = 'placeholder';
-      placeholder.textContent = 'Select options...';
-      selectedItems.appendChild(placeholder);
-    }
+/* ===== REMOVE TAG ON CLICK ===== */
+selectedItems.addEventListener("click", (e) => {
+  const val = e.target.dataset.remove;
+  if (!val) return;
+  selectedVals.delete(val);
+  e.target.remove();
+
+  if (selectedVals.size === 0) {
+    const ph = document.createElement("span");
+    ph.className = "placeholder";
+    ph.textContent = "No symptoms yet…";
+    selectedItems.appendChild(ph);
   }
 });
 
-document.addEventListener('click', (e) => {
+/* ===== CLEAR ALL ===== */
+clearBtn.addEventListener("click", () => {
+  selectedVals.clear();
+  selectedItems.innerHTML = '<span class="placeholder">No symptoms yet…</span>';
+});
+
+/* ===== SEARCH FILTER IN DROPDOWN (shows options) ===== */
+searchInput.addEventListener("input", () => {
+  const term = searchInput.value.toLowerCase();
+  const opts = dropdown.querySelectorAll(".dropdown-option");
+  opts.forEach((o) => {
+    o.style.display = o.textContent.toLowerCase().includes(term)
+      ? "block"
+      : "none";
+  });
+});
+
+/* OPTIONAL: close dropdown when clicking outside */
+document.addEventListener("click", (e) => {
   if (!multiSelect.contains(e.target)) {
-    multiSelect.classList.remove('active');
+    multiSelect.classList.remove("active");
   }
 });
 
-predictBtn.addEventListener('click', () => {
-  alert('Selected: ' + Array.from(selectedValues).join(', '));
+/* ===== PREDICT DISEASE BUTTON ===== */
+predictBtn.addEventListener("click", () => {
+  if (selectedVals.size < 4) {
+    alert("Select at least 4 symptoms first.");
+    return;
+  }
+
+  // POST /predict
+  fetch(`${API_BASE}/predict`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ symptoms: [...selectedVals] }),
+  })
+    .then((r) => r.json())
+    .then((js) => {
+      const disease = js.disease
+        ? js.disease
+        : js.replace("Predicted disease: ", "");
+
+      document.getElementById("result").textContent = `Disease: ${disease}`;
+      document.getElementById("result").classList.remove("hidden");
+
+      // fetch medicines
+      return fetch(
+        `${API_BASE}/medicines/${encodeURIComponent(disease)}?limit=3`
+      );
+    })
+    .then((r) => r.json())
+    .then((js) => {
+      const ul = document.getElementById("meds");
+      ul.innerHTML = "";
+      js.medicines.forEach((m) => {
+        const li = document.createElement("li");
+        li.textContent = m;
+        ul.appendChild(li);
+      });
+    })
+    .catch((err) => alert("Error: " + err));
 });

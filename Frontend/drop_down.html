@@ -1,43 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Haven Health</title>
-  <link rel="stylesheet" href="drop_down.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="background-layer">
-    <div class="background-map"></div>
 
-    <header>
-      <div class="logo">Haven<span>Health</span></div>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Haven Health Predict</title>
 
-    <div class="predict-box">
-      <div class="multi-select" id="multiSelect">
-        <div class="selected-items" id="selectedItems">
-          <span class="placeholder">Select options...</span>
-        </div>
-        <div class="dropdown-arrow">&#9662;</div>
-        <div class="dropdown" id="dropdown">
-          <div data-value="option1">Option 1</div>
-          <div data-value="option2">Option 2</div>
-          <div data-value="option3">Option 3</div>
-          <div data-value="option4">Option 4</div>
-          <div data-value="option5">Option 5</div>
-          <div data-value="option6">Option 6</div>
-          <div data-value="option7">Option 7</div>
-          <div data-value="option8">Option 8</div>
-          <div data-value="option9">Option 9</div>
-          <div data-value="option10">Option 10</div>
-        </div>
-      </div>
-      <button id="predictBtn">Predict</button>
-    </div>
-  </div>
+        <!-- original stylesheet and font -->
+        <link href="drop_down.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+            rel="stylesheet" />
+    </head>
 
-  <script src="drop_down.js"></script>
-</body>
+    <body>
+        <!-- ===== NAVBAR ===== -->
+        <nav class="navbar">
+            <div class="logo">Haven<span>Health</span></div>
+
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- ===== BACKGROUND & NAVBAR LAYER (unchanged selectors) ===== -->
+        <div class="background-layer">
+            <header>
+                <div class="logo">Haven<span>Health</span></div>
+            </header>
+
+            <!-- ===== CARD BOX ===== -->
+            <div class="card-box">
+                <h2>Symptom picker</h2>
+                <p class="subtext">Start typing to add symptoms (min 4)</p>
+
+                <!-- ===== MULTI-SELECT AREA (same classes your CSS expects) ===== -->
+                <div class="multi-select" id="multiSelect">
+                    <div class="selected-items" id="selectedItems">
+                        <span class="placeholder">No symptoms yet…</span>
+                    </div>
+
+                    <!-- search box + datalist for suggestions -->
+                    <input id="sym-search" type="text" list="sym-list" placeholder="Search symptom…"
+                        autocomplete="off" />
+                    <datalist id="sym-list"></datalist>
+
+                    <!-- dropdown container populated by JS -->
+                    <div class="dropdown" id="dropdown"></div>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+
+                <!-- action buttons -->
+                <button id="add-btn">Add symptom</button>
+                <button id="clear-btn">Clear all</button>
+                <button id="predict-btn">Predict disease</button>
+
+                <!-- prediction result -->
+                <h3 id="result" class="hidden">Result</h3>
+                <ul id="meds"></ul>
+            </div><!-- /.card-box -->
+        </div><!-- /.background-layer -->
+
+        <!-- ===== SCRIPT ===== -->
+        <script src="drop_down.js"></script>
+    </body>
+
 </html>
