@@ -13,7 +13,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   const data = await res.json();
   if (res.ok) {
     alert("Login successful!");
-    window.location.href = "index.html";
+    window.location.href = "drop_down.html";
   } else {
     alert(data.error);
   }

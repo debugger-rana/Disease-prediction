@@ -7,7 +7,7 @@ from middleware import setup_cors
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from sklearn.preprocessing import LabelEncoder
-from fastapi import FastAPI, HTTPException, Query       #new added
+from fastapi import FastAPI, HTTPException, Query      
 
 # Load your trained ML model
 model = pickle.load(open("models/randomforest.pkl", "rb"))
