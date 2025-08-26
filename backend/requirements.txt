@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 pymongo
+motor
 numpy
 pandas
 scikit-learn
