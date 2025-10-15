@@ -18,12 +18,12 @@ body {
   position: relative;
   min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .background-layer::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -270,5 +270,113 @@ h1 {
     width: 200px;
     height: 200px;
     filter: blur(60px);
+  }
+}
+
+/* Features Section Styles */
+.project-features {
+  background-color: transparent;
+  padding: 80px 20px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.features-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.features-subtitle {
+  font-size: 18px;
+  color: #aaa;
+  margin-bottom: 50px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(242, 1, 1, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.feature-card:hover {
+  border-color: #F20101;
+  background: rgba(242, 1, 1, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(242, 1, 1, 0.2);
+}
+
+.feature-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  filter: grayscale(0.2);
+}
+
+.feature-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.feature-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #bbb;
+}
+
+/* Mobile responsiveness for features section */
+@media (max-width: 768px) {
+  .project-features {
+    padding: 50px 15px;
+    margin-top: 40px;
+  }
+
+  .features-title {
+    font-size: 32px;
+  }
+
+  .features-subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-card {
+    padding: 25px;
+  }
+
+  .feature-icon {
+    font-size: 40px;
+  }
+
+  .feature-card h3 {
+    font-size: 20px;
+  }
+
+  .feature-card p {
+    font-size: 14px;
   }
 }
