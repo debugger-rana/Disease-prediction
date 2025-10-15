@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<title>Chatbot</title>
+		<title>Haven Health - Medical Chatbot</title>
 
 		<!--  Bootstrap / Font-Awesome  -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -16,9 +16,42 @@
 
 		<!--  jQuery – needed for the original script  -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<style>
+			.back-to-home {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				background: linear-gradient(135deg, #F20101, #ff4444);
+				color: white;
+				padding: 10px 20px;
+				border-radius: 25px;
+				text-decoration: none;
+				font-weight: 600;
+				font-family: 'Montserrat', sans-serif;
+				box-shadow: 0 4px 15px rgba(242, 1, 1, 0.3);
+				transition: all 0.3s ease;
+				z-index: 1000;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.back-to-home:hover {
+				background: linear-gradient(135deg, #ff4444, #F20101);
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(242, 1, 1, 0.4);
+				text-decoration: none;
+				color: white;
+			}
+		</style>
 	</head>
 
 	<body>
+		<!-- Back to Home Button -->
+		<a href="http://localhost:5500/Frontend/index.html" class="back-to-home">
+			<i class="fas fa-arrow-left"></i> Back to Haven Health
+		</a>
+		
 		<div class="container-fluid h-100">
 			<div class="row justify-content-center h-100">
 				<div class="col-md-8 col-xl-6 chat">
